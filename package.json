@@ -1,0 +1,13 @@
+{
+  "name": "bruhmaintainer",
+  "version": "1.0.0",
+  "description": "This bot makes sure #spam has :bruh~1:, and nothing else.",
+  "main": "index.js",
+  "repository": "https://github.com/SleeperzGaming/BruhMaintainer",
+  "author": "IamPrecious",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "discord.js": "^13.2.0"
+  }
+}
