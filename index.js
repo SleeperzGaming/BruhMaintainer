@@ -56,7 +56,7 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
   );
 
   newMessage.delete();
-  fixChainIssuesAroundMessage(message);
+  fixChainIssuesAroundMessage(newMessage);
 });
 
 async function fixChainIssuesAroundMessage(message) {
