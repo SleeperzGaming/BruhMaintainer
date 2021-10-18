@@ -14,9 +14,10 @@ client.on("ready", () => {
 });
 
 client.on("messageCreate", async (message) => {
-  if (message.channelId !== config.channelId) return;
-  if (message.content !== config.emoji) {
-    log(`<@${message.author.id}> has sent a bad message :(`);
+  const chainEmoji = config.channels[message.channelId];
+  if (!chainEmoji) return;
+  if (message.content !== chainEmoji) {
+    log(`${message.author} has sent a bad message :(`);
     await message.delete();
     return;
   }
@@ -25,7 +26,7 @@ client.on("messageCreate", async (message) => {
     before: message.id,
   });
   if (prevMessages.first().author.id === message.author.id) {
-    log(`<@${message.author.id}> has doubled up on their spam :(`);
+    log(`${message.author} has doubled up on their spam :(`);
     await message.delete();
     return;
   }
@@ -34,15 +35,16 @@ client.on("messageCreate", async (message) => {
 client.on("messageDelete", async (message) => {
   //Note: This is useless for messages older than 14 days, due to discord API limitations
   //of delete and edit events not firing for messages older than 14 days.
-  if (message.channelId !== config.channelId) return;
+  //WTF DISCORD? now its not detecting messages older than 24 hours.
+  if (!config.channels[message.channelId]) return;
   log(
-    `A message (${message.id}) from <@${message.author.id}> was deleted in #spam.`
+    `A message (${message.id}) from ${message.author} was deleted in ${message.channel}`
   );
   fixChainIssuesAroundMessage(message);
 });
 
 client.on("messageUpdate", (oldMessage, newMessage) => {
-  if (message.channelId !== config.channelId) return;
+  if (!config.channels[newMessage.channelId]) return;
 
   //Note: This is useless for messages older than 14 days, due to discord API limitations
   //of delete and edit events not firing for messages older than 14 days.
@@ -54,7 +56,7 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
   // a user may be correcting their past mistakes. we shalth allow it.
 
   log(
-    `A message (${newMessage.id}) from <@${newMessage.author}> was edited in #spam.`
+    `A message (${newMessage.id}) from ${newMessage.author} was edited in #spam.`
   );
 
   newMessage.delete();
