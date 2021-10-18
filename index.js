@@ -42,6 +42,8 @@ client.on("messageDelete", async (message) => {
 });
 
 client.on("messageUpdate", (oldMessage, newMessage) => {
+  if (message.channelId !== config.channelId) return;
+
   //Note: This is useless for messages older than 14 days, due to discord API limitations
   //of delete and edit events not firing for messages older than 14 days.
   if (oldMessage.content === newMessage.content) {
